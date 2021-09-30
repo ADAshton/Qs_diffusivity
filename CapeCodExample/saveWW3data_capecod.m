@@ -1,37 +1,40 @@
-function saveWISdata(inputFolder_WIS,outputFolder_WIS,ShelfOrient)
+function saveWW3data(inputFolder_WW3,outputFolder_WW3,ShelfOrient)
+
+%this function takes wave watch data and outputs wave roses
+
 
 % Check to make sure that folder actually exists.  Warn user if it doesn't.
-if ~isdir(inputFolder_WIS)
-  errorMessage = sprintf('Error: The following folder does not exist:\n%s', inputFolder_WIS);
+if ~isdir(inputFolder_WW3)
+  errorMessage = sprintf('Error: The following folder does not exist:\n%s', inputFolder_WW3);
   uiwait(warndlg(errorMessage));
   return;
 end
-if ~isdir(outputFolder_WIS)
-  errorMessage = sprintf('Error: The following folder does not exist:\n%s', outputFolder_WIS);
+if ~isdir(outputFolder_WW3)
+  errorMessage = sprintf('Error: The following folder does not exist:\n%s', outputFolder_WW3);
   uiwait(warndlg(errorMessage));
   return;
 end
 
 % Get a list of all files in the folder with the desired file name pattern.
-infilePattern = fullfile(inputFolder_WIS, '*.mat'); % Change to whatever pattern you need.
+infilePattern = fullfile(inputFolder_WW3, '*.mat'); % Change to whatever pattern you need.
 input_files = dir(infilePattern);
 
-for k = 1 : length(input_files)
-    baseFileName = input_files(k).name;
-    fullFileName = fullfile(inputFolder_WIS, baseFileName);
+for runs = 1 : length(input_files)
+    baseFileName = input_files(runs).name;
+    fullFileName = fullfile(inputFolder_WW3, baseFileName);
     %fprintf(1, 'Now reading %s\n', fullFileName);
     load(fullFileName);
     [pathstr,filename,ext] = fileparts(fullFileName)
-    savename = [outputFolder_WIS filename '_rose.mat'];
+    savename = [outputFolder_WW3 filename '_rose.mat'];
     
     %loadname = ['C:/Andrew/WIS/WISDATA/WISn' num2str(stations(k)) '_80_99']
     %load(loadname);
     %load NDBC_44018_02_12(mod)
 
     %savename = ['climdata/rose' num2str(stations(k)) '_80_99_' 'th' num2str(Shores(k)) '_pk']
-
-    
     ShoreOrient = ShelfOrient;
+
+  
     
     %ShoreOrient = Shores(k);
     %ShelfOrient = Shores(k);   % for backrefraction computations - should backrefract compard to shelf, not shore orientation
@@ -39,8 +42,8 @@ for k = 1 : length(input_files)
 
     shornt = 0;           % degrees (clockwise = positive) difference between location and array
     g= 9.81;             % That's gravity, holmes
-    pi = 3.1415;         % ref. Archimedes (-232)
     degtorad = pi/180;   % convert radians to degrees
+    depth = 200;          % m - depth @ WIS station - not really used here
     binsize = 15;       % um, size of the bins
     binnumber = 360/binsize
     binarray = binsize/2:binsize:360-binsize/2;
@@ -91,10 +94,6 @@ for k = 1 : length(input_files)
 
         WaveAngleIn = data(j,2);
         AngleRot = (mod(data(j,2)-ShelfOrient+180,360)-180);
-        %%%%%%%%%%%%%%%%%%%%
-        %is Total: Vector Mean Wave Direction (degrees clockwise from True north)
-        %the correct angle to be using here??
-        %%%%%%%%%%%%%%%%%%%
 
         % for all calculated, look only at what approaches a shore,
         % so +- 90 is all
@@ -185,6 +184,8 @@ for k = 1 : length(input_files)
     hold off
 
     save(savename)
+    time_run = zeros(length(input_files),1);
+    time_run(runs) = toc./60; %time each run takes in minutes
     %savename
 end
 

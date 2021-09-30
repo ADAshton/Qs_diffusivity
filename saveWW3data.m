@@ -43,7 +43,6 @@ for runs = 1 : length(input_files)
     shornt = 0;           % degrees (clockwise = positive) difference between location and array
     g= 9.81;             % That's gravity, holmes
     degtorad = pi/180;   % convert radians to degrees
-    depth = 200;          % m - depth @ WIS station - not really used here
     binsize = 15;       % um, size of the bins
     binnumber = 360/binsize
     binarray = binsize/2:binsize:360-binsize/2;

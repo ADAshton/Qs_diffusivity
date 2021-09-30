@@ -1,4 +1,4 @@
-function calculateQs_Dif(inputFolder_QsDif,outputFolder_QsDif,SLdata_detrend,ind_open,RotationAngle,plot_on)
+function [Diffusivity_save] = calculateQs_Dif(inputFolder_QsDif,outputFolder_QsDif,SLdata_detrend,ind_open,RotationAngle,plot_on)
 
 % Check to make sure that folder actually exists.  Warn user if it doesn't.
 if ~isdir(inputFolder_QsDif)
@@ -18,7 +18,6 @@ input_files = dir(infilePattern);
 
 Xrot = SLdata_detrend(:,1);
 Yrot = SLdata_detrend(:,2);
-
 for runs = 1 : length(input_files)
     tic;
     
@@ -30,6 +29,9 @@ for runs = 1 : length(input_files)
         load(fullFileName);  
     savename = [outputFolder_QsDif filename '_qsdif.mat'];
     
+    if runs == 1
+        Diffusivity_save = nan(length(ind_open),length(input_files));
+    end
     avewidth = 7; %cells per side - it "smooths" the result
     pi = 3.1415;
     degtorad = pi/180;
@@ -64,7 +66,6 @@ for runs = 1 : length(input_files)
     Qsglobal = QsRaws(:,1);
     Diff = TrueDiffs(:,1);
     Diffglobal = TrueDiffs(:,1);
-    
     %plotting
 %     xlimr = Limxr;
 %     xliml = Limxl;
@@ -96,7 +97,8 @@ for runs = 1 : length(input_files)
     QsglobalSL = interp1(angles,-Qsglobal,Ang);
     DiffSL = interp1(angles,Diff,Ang);
     DiffglobalSL = interp1(angles,Diffglobal,Ang);
-    
+    Diffusivity_save(:,runs) = DiffSL;
+
     
     % compute dQs/dx
     grad(1:length(QsSL)) = 0; %alongshore gradient
@@ -156,7 +158,7 @@ for runs = 1 : length(input_files)
     
     subplot(4,1,4)
     % plot diffs
-    plot(Xrotopen,GammaSL,'-m','linewidth',1.5)
+    plot(Xrotopen,DiffSL,'-m','linewidth',1.5)
     hold on
     %plot(Yp,DiffFake,'b','linewidth',1.5)
     line(Xrot,zeros(length(Xrot),1),'Color','k')
@@ -167,7 +169,7 @@ for runs = 1 : length(input_files)
     %set(gca,'linewidth',2)
     set(gca,'fontweight','bold')
     set(gca,'fontsize',14)
-    ylabel('Inst')
+    ylabel('Diffusivity')
     xlabel('Alongshore location (km)')
     f = get(gca,'TickLength');
     set(gca,'TickLength',f*3);
@@ -222,7 +224,5 @@ for runs = 1 : length(input_files)
     end
     save(savename)
     
-    time_run = zeros(length(input_files),1);
-    time_run(runs) = toc./60 %time each run takes in minutes
     
 end

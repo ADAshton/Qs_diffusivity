@@ -2,7 +2,7 @@
 % input is long and lat of shoreline, WaveWatch3, and WIS data
 % only difference for using UTM is that "stretching" step is not needed.
 
-% Last updated Sept. 8, 2021
+% Last updated Sept. 30, 2021
 % Rose Palermo
 
 %% Part 1: WAVES
@@ -12,13 +12,18 @@
 % input is WIS and WW3 data as a table format saved in its own folder
 % output is matlab files of computed wave climate info using CERC formula
 
+% WIS and WW3 data should be input in separate folders. Saved into same
+% folder.
+
 % WaveWatch3
+% LINK for WW3:https://jhnienhuis.users.earthengine.app/view/changing-shores
 inputFolder_WW3 = []; % where is your WW3 data?
 outputFolder_Waves = []; % where do you want the wave roses to go?
 ShorelineAngle_init = []; % where the shoreline angle loop starts
 saveWW3data(inputFolder_WW3,outputFolder_Waves,ShorelineAngle_init)
 
 % WIS
+% LINK for WIS: https://chlthredds.erdc.dren.mil/thredds/catalog/wis/catalog.html
 inputFolder_WIS = []; % where is your WW3 data?
 outputFolder_Waves = []; % where do you want the wave roses to go?
 saveWISdata(inputFolder_WIS,outputFolder_Waves,ShorelineAngle_init)
@@ -30,7 +35,7 @@ plot_on = 1; % 1 to make plots, 0 to not
 computewaveclimate_CERC(outputFolder_Waves,outputFolder_waveclimate,plot_on)
 
 
-%% Part 2 shoreline + diffusivity and Qs calculations
+%% Part 2 shoreline
 %%%%% load shoreline data
 % need long and lat points of the open ocean coast
 % load data as data_raw, an nx2 matrix of long and lat data
@@ -67,9 +72,11 @@ SLdata(:,2) = (SLdata(:,2)-min(SLdata(:,2))) * lat;
 
 % Confirm that the shoreline is mostly oriented up. If not, first rotate by 180
 % degrees using the rotate180 function.
-% [Xrot,Yrot] = rotate180(SLdata); % uncomment if needed
 
-[SLdata_detrend] = detrendshoreline(SLdata);
+% [SLdata_180rot] = rotate180(SLdata); % uncomment if needed
+
+% if do 180, add 180 to RotationAngle (Maybe? we'll check together)
+[SLdata_detrend, RotationAngle] = detrendshoreline(SLdata);
 
 
 
@@ -77,8 +84,8 @@ SLdata(:,2) = (SLdata(:,2)-min(SLdata(:,2))) * lat;
 %% Part 3: calculate sediment flux and diffusivity given shoreline and wave climate
 
 plot_on = 1;
-inputFolder = '/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/_qsdif';
-outputFolder = '/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/test';
+outputFolder_waveclimate = '/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/_qsdif';
+outputFolder_Dif = '/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/test';
 
-calculateQs_Dif(inputFolder,outputFolder,SLdata_detrend,ind_open,RotationAngle,plot_on)
+calculateQs_Dif(outputFolder_waveclimate,outputFolder_Dif,SLdata_detrend,ind_open,RotationAngle,plot_on)
 

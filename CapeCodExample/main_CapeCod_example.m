@@ -21,7 +21,7 @@ saveWW3data(inputFolder_WW3,outputFolder_Waves,ShorelineAngle_init)
 % WIS
 inputFolder_WIS = "THIS FOLDER/WIS_Data"; % where is your WW3 data?
 outputFolder_Waves = "THIS FOLDER/Wave_Data"; % where do you want the wave roses to go?
-saveWISdata(inputFolder_WIS,outputFolder_Waves,ShorelineAngle_init)
+saveWISdata_capecod(inputFolder_WIS,outputFolder_Waves,ShorelineAngle_init)
 
 %%%%% compute wave climate -- this only needs to be done one time for a set of WIS & WW3 stations
 outputFolder_Waves = "THIS FOLDER/Wave_Data"; % same as above)
@@ -50,7 +50,6 @@ SLdata = join_cst(data_raw,tol);
 % by hand yet.
 ind_all = 1:length(SLdata);
 % loaded in CapeCodsl
-% ind_open = []; % if all points are open coastline, ind_open = ind_all;
 
 
 %%%%% stretch
@@ -72,16 +71,19 @@ SLdata(:,2) = (SLdata(:,2)-min(SLdata(:,2))) * lat;
 % degrees using the rotate180 function.
 % [Xrot,Yrot] = rotate180(SLdata); % uncomment if needed
 
-[SLdata_detrend] = detrendshoreline(SLdata);
+[SLdata_detrend,RotationAngle] = detrendshoreline(SLdata);
 
 
 %% Part 3: calculate sediment flux and diffusivity given shoreline and wave climate
 
-plot_on = 1;
-inputFolder = '/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/_qsdif';
-outputFolder = '/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/test';
-
+%Rose's example here
+load('/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/caperot.mat')
 SLdata_detrend = [Xrot Yrot];
 ind_open = good;
-calculateQs_Dif(inputFolder,outputFolder,SLdata_detrend,ind_open,RotationAngle,plot_on)
+
+plot_on = 1;
+outputFolder_waveclimate = '/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/_qsdif';
+outputFolder = '/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/test';
+
+[Diffusivity_save] = calculateQs_Dif(outputFolder_waveclimate,outputFolder,SLdata_detrend,ind_open,RotationAngle,plot_on);
 

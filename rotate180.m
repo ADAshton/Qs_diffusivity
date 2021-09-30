@@ -1,4 +1,4 @@
-function [Xrot,Yrot] = rotate180(SLdata)
+function [SLdata_180rot] = rotate180(SLdata)
 
 RotationAngle = 180; % degrees.
 
@@ -18,5 +18,7 @@ end
 
 Xrot = Xrot -min(Xrot); % rotated X
 Yrot = Yrot - min(Yrot); % rotated Y
+
+SLdata_180rot = [Xrot Yrot];
 
 end

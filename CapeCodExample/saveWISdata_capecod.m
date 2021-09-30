@@ -41,6 +41,7 @@ for k = 1 : length(input_files)
     g= 9.81;             % That's gravity, holmes
     pi = 3.1415;         % ref. Archimedes (-232)
     degtorad = pi/180;   % convert radians to degrees
+    depth = 200;          % m - depth @ WIS station - not really used here
     binsize = 15;       % um, size of the bins
     binnumber = 360/binsize
     binarray = binsize/2:binsize:360-binsize/2;
@@ -49,6 +50,7 @@ for k = 1 : length(input_files)
     EnergyFluxIn = zeros(1,360/binsize);
 
     ldata = length(data);
+    depth = 200;
 
     AngleInV = zeros(ldata,1);
     AngleDeepV= zeros(ldata,1);
@@ -86,11 +88,11 @@ for k = 1 : length(input_files)
 
     for j = 1:ldata
 
-        HIn = data(j,1);
-        T = data(j,3);
+        HIn = data(j,10);
+        T = data(j,13);
 
-        WaveAngleIn = data(j,2);
-        AngleRot = (mod(data(j,2)-ShelfOrient+180,360)-180);
+        WaveAngleIn = data(j,16);
+        AngleRot = (mod(data(j,16)-ShelfOrient+180,360)-180);
         %%%%%%%%%%%%%%%%%%%%
         %is Total: Vector Mean Wave Direction (degrees clockwise from True north)
         %the correct angle to be using here??
