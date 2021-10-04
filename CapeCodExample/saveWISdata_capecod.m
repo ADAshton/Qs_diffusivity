@@ -21,8 +21,8 @@ for k = 1 : length(input_files)
     fullFileName = fullfile(inputFolder_WIS, baseFileName);
     %fprintf(1, 'Now reading %s\n', fullFileName);
     load(fullFileName);
-    [pathstr,filename,ext] = fileparts(fullFileName)
-    savename = [outputFolder_WIS filename '_rose.mat'];
+    [pathstr,filename,ext] = fileparts(fullFileName);
+    savename = [outputFolder_WIS '/' filename '_rose.mat']; 
     
     %loadname = ['C:/Andrew/WIS/WISDATA/WISn' num2str(stations(k)) '_80_99']
     %load(loadname);
@@ -186,7 +186,7 @@ for k = 1 : length(input_files)
     set(h,'LineWidth',2)
     hold off
 
-    save(savename)
+    save(join(savename,''))
     %savename
 end
 

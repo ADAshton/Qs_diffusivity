@@ -5,6 +5,10 @@
 % Last updated Sept. 8, 2021
 % Rose Palermo
 
+%% add main folder to path
+cd ..
+addpath(pwd)
+
 %% Part 1: WAVES
 
 %%%%% WIS and WW3 -- This only needs to be done once for each shoreline. Then saved data can be reused.
@@ -13,10 +17,10 @@
 % output is matlab files of computed wave climate info using CERC formula
 
 % WaveWatch3
-inputFolder_WW3 = "THIS FOLDER/WW3_Data"; % where is your WW3 data?
-outputFolder_Waves = "THIS FOLDER/Wave_data"; % where do you want the wave roses to go?
-ShorelineAngle_init = []; % where the shoreline angle loop starts
-saveWW3data(inputFolder_WW3,outputFolder_Waves,ShorelineAngle_init)
+inputFolder_WW3 = 'THIS FOLDER/WW3_Data'; % where is your WW3 data?
+outputFolder_Waves = 'THIS FOLDER/Wave_Data'; % where do you want the wave roses to go?
+ShorelineAngle_init = 165; % where the shoreline angle loop starts
+saveWW3data_capecod(inputFolder_WW3,outputFolder_Waves,ShorelineAngle_init)
 
 % WIS
 inputFolder_WIS = "THIS FOLDER/WIS_Data"; % where is your WW3 data?
@@ -34,7 +38,7 @@ computewaveclimate_CERC(outputFolder_Waves,outputFolder_waveclimate,plot_on)
 %%%%% load shoreline data
 % need long and lat points of the open ocean coast
 % load data as data_raw, an nx2 matrix of long and lat data
-load('CapeCodsl')
+load('CapeCodsl_example.mat')
 data_raw = SLdata;
 
 %%%%% shorefixer
@@ -50,7 +54,7 @@ SLdata = join_cst(data_raw,tol);
 % by hand yet.
 ind_all = 1:length(SLdata);
 % loaded in CapeCodsl
-
+% ind_open = ind_all; % if they are the same;
 
 %%%%% stretch
 % convert long and lat to x and y
@@ -61,7 +65,7 @@ ind_all = 1:length(SLdata);
 lat = 111.069; % cape cod example
 lon = 83.110; % cape cod example
 
-SLdata(:,1) = (SLdata(:,1)-min(SLdata(:,1))) * lon;%changed from lon/lat*lon to just lon
+SLdata(:,1) = (SLdata(:,1)-min(SLdata(:,1))) * lon;
 SLdata(:,2) = (SLdata(:,2)-min(SLdata(:,2))) * lat;
 
 %%%%% detrend
@@ -69,21 +73,21 @@ SLdata(:,2) = (SLdata(:,2)-min(SLdata(:,2))) * lat;
 
 % Confirm that the shoreline is mostly oriented up. If not, first rotate by 180
 % degrees using the rotate180 function.
-% [Xrot,Yrot] = rotate180(SLdata); % uncomment if needed
+% [SLdata] = rotate180(SLdata); % uncomment if needed
 
-[SLdata_detrend,RotationAngle] = detrendshoreline(SLdata);
+[SLdata_detrend,RotationAngle] = detrendshoreline(SLdata,ind_open);
 
 
 %% Part 3: calculate sediment flux and diffusivity given shoreline and wave climate
 
-%Rose's example here
-load('/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/caperot.mat')
-SLdata_detrend = [Xrot Yrot];
-ind_open = good;
+% %Rose's example here
+% load('/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/caperot.mat')
+% SLdata_detrend = [Xrot Yrot];
+% ind_open = good;
 
 plot_on = 1;
-outputFolder_waveclimate = '/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/_qsdif';
-outputFolder = '/Users/rosepalermo/Documents/Research/Luis Stuff/Files Rose Changed/test';
+outputFolder_waveclimate = 'FOLDER';
+outputFolder = 'FOLDER';
 
 [Diffusivity_save] = calculateQs_Dif(outputFolder_waveclimate,outputFolder,SLdata_detrend,ind_open,RotationAngle,plot_on);
 

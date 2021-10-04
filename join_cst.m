@@ -26,7 +26,7 @@ function [new_coast,slen]=join_cst(coast,tol);
 %
 coast=fixcoast(coast);   %replace -99999. with NaN, eliminate dup NaNs, etc.
 
-plot(coast(:,1),coast(:,2));set(gca,'aspectratio',[nan 1]);
+plot(coast(:,1),coast(:,2));%set(gca,'aspectratio',[nan 1]);
 figure(gcf);
 
 iseg=find(isnan(coast(:,1)));

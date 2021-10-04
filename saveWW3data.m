@@ -98,7 +98,6 @@ for runs = 1 : length(input_files)
         % so +- 90 is all
         % add up contributions to
         if (abs(AngleRot)< 90)
-
             % backrefract
             Length =   g * T^2/2/pi*(tanh(((2* pi)^2 * depth / (T^2 * g))^(3/4)) ^ (2/3));
             % Ldeep = g * T^2/2/pi;
@@ -182,9 +181,7 @@ for runs = 1 : length(input_files)
     set(h,'LineWidth',2)
     hold off
 
-    save(savename)
-    time_run = zeros(length(input_files),1);
-    time_run(runs) = toc./60; %time each run takes in minutes
+    save(join(savename,''))
     %savename
 end
 

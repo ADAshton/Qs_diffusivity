@@ -184,7 +184,7 @@ for k = 1 : length(input_files)
     set(h,'LineWidth',2)
     hold off
 
-    save(savename)
+    save(join(savename,''))
     %savename
 end
 

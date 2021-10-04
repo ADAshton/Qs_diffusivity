@@ -25,7 +25,7 @@ for runs = 1 : length(input_files)
     %fprintf(1, 'Now reading %s\n', fullFileName);
     load(fullFileName);
     [pathstr,filename,ext] = fileparts(fullFileName)
-    savename = [outputFolder_WW3 filename '_rose.mat'];
+    savename = [outputFolder_WW3 '/' filename '_rose.mat'];
     
     %loadname = ['C:/Andrew/WIS/WISDATA/WISn' num2str(stations(k)) '_80_99']
     %load(loadname);
@@ -183,9 +183,7 @@ for runs = 1 : length(input_files)
     set(h,'LineWidth',2)
     hold off
 
-    save(savename)
-    time_run = zeros(length(input_files),1);
-    time_run(runs) = toc./60; %time each run takes in minutes
+    save(join(savename,''))
     %savename
 end
 

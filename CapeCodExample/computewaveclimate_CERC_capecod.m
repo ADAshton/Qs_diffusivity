@@ -26,7 +26,7 @@ for runs = 1 : length(input_files_rose)
     %fprintf(1, 'Now reading %s\n', fullFileName);
     load(fullFileName_rose);
     [~,filename_rose,~] = fileparts(fullFileName_rose);
-    savename = [outputFolder_qsdif '/' filename_rose '_qsdif.mat'];
+    savename = [outputFolder_qsdif filename_rose '_qsdif.mat'];
     
     
     % variables
@@ -40,6 +40,7 @@ for runs = 1 : length(input_files_rose)
     g= 9.81;             % That's gravity, holmes
     pi = 3.1415;         % ref. Archimedes (-232)
     degtorad = pi/180;   % convert radians to degrees
+    depth = 200;          % m - depth @ WIS station - not really used here
     binsize = 7.5;       % um, size of the bins
     binnumber = 360/binsize;
     binarray = -180+binsize/2:binsize:180-binsize/2;
@@ -71,10 +72,10 @@ for runs = 1 : length(input_files_rose)
         
         EnergyFlux = zeros(1,360/binsize);
         
-        AST = zeros(6,360/binsize);
-        ASTSum = zeros(6,1);
-        Diff = zeros(6,360/binsize);
-        DiffSum = zeros(6,1);
+        AST = zeros(2,360/binsize);
+        ASTSum = zeros(2,1);
+        Diff = zeros(2,360/binsize);
+        DiffSum = zeros(2,1);
         
         Bad = 0; % bad data points
         NotRef = 0;
@@ -187,7 +188,7 @@ for runs = 1 : length(input_files_rose)
     end
     
     clear AngleDeepV HInV HDeepV AngleInV TIn
-    save(join(savename,''))
+    save(savename)
     
     
     time_run = zeros(length(input_files_rose),1);
