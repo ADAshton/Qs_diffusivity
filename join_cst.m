@@ -48,7 +48,7 @@ id0=ii(1);
 id=id0;
 z0=z(iseg(id)+1);   %first point on segment
 zind=[(iseg(id)+1):(iseg(id+1)-1)];
-line(real(z(zind)),imag(z(zind)),'erasemode','none','color','white')
+% line(real(z(zind)),imag(z(zind)),'erasemode','none','color','white')
 zc=z(iseg(id+1)-1); %last point on segment
 
 irem(id)=0;    %add current segment to list of segments used 
@@ -71,7 +71,7 @@ while (found_next),
       zi=[(iseg(id)+1):1:(iseg(id+1)-1)];   %segment coordinates
     end
     ni=length(zi);
-    line(real(z(zi)),imag(z(zi)),'erasemode','none','color','white') %draw seg
+%     line(real(z(zi)),imag(z(zi)),'erasemode','none','color','white') %draw seg
     irem(id)=0;             %mask out segment
     zc=z(zi(ni));              %next connecting point
     zind=[zind zi];         %add segment to index list
@@ -86,7 +86,7 @@ while (found_next),
     end
   end
 end
-k=k+1
+k=k+1;
 znew=[znew; nan+sqrt(-1)*nan; z(zind)];   %add on new contatenated segment 
 end
 znew=[znew; nan+sqrt(-1)*nan];  %add nan on end

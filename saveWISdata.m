@@ -58,10 +58,8 @@ for k = 1 : length(input_files)
 
     % where loop will start
 
-    ShAng = ShoreOrient;
 
     % zero some stuff
-    ShAng
     ASTSum = 0;
     RateSum = 0;
     ASTSumNB = 0;

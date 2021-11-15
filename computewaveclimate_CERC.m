@@ -15,7 +15,7 @@ if ~isdir(outputFolder_qsdif)
 end
 
 % Get a list of all files in the folder with the desired file name pattern.
-infilePattern_rose = fullfile(inputFolder_rose, '*.mat'); % Change to whatever pattern you need.
+infilePattern_rose = fullfile(inputFolder_rose, '*_rose.mat'); % Change to whatever pattern you need.
 input_files_rose = dir(infilePattern_rose);
 
 for runs = 1 : length(input_files_rose)
