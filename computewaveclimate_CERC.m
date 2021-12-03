@@ -52,13 +52,13 @@ for runs = 1 : length(input_files_rose)
     
     EnergyFluxarray = zeros(calcangles,360/binsize);
     ShAngs = zeros(calcangles, 1);
-    QsRaws = zeros(calcangles,6);
-    Qss = zeros(calcangles, 6);
-    QssGross = zeros(calcangles, 6);
-    ASTs = zeros(calcangles,6,binnumber);
-    Diffs = zeros(calcangles, 6, binnumber);
-    Gammas = zeros(calcangles, 6);
-    TrueDiffs = zeros(calcangles, 6);
+    QsRaws = zeros(calcangles,1);
+    Qss = zeros(calcangles, 1);
+    QssGross = zeros(calcangles, 1);
+    ASTs = zeros(calcangles,1,binnumber);
+    Diffs = zeros(calcangles, 1, binnumber);
+    Gammas = zeros(calcangles, 1);
+    TrueDiffs = zeros(calcangles, 1);
     
     % where loop will start
     
@@ -71,47 +71,23 @@ for runs = 1 : length(input_files_rose)
         
         EnergyFlux = zeros(1,360/binsize);
         
-        AST = zeros(6,360/binsize);
-        ASTSum = zeros(6,1);
-        Diff = zeros(6,360/binsize);
-        DiffSum = zeros(6,1);
+        AST = zeros(1,360/binsize);
+        ASTSum = zeros(1,1);
+        Diff = zeros(1,360/binsize);
+        DiffSum = zeros(1,1);
         
         Bad = 0; % bad data points
         NotRef = 0;
         
         for j = 1:ldata
             
-            H = HDeepV(j);
-            Ang = (mod(AngleDeepV(j)-ShAng+180,360)-180);
-            T = TIn(j);
-            
-            if ((abs(Ang)<90))
-                for i = 1:binnumber
-                    
-                    if ((((i-1)*binsize)-180 < Ang) && (Ang < i * binsize-180))
-                        
-                        asign = sign(Ang);
-                        Angle = abs(Ang);
-                        
-                        % add up contribution to energy flux
-                        HTscale = (H^(12/5)) * (T^(1/5));
-                        EnergyFlux(i) = EnergyFlux(i) + HTscale;
-                        
-                        % CERC formula
-                        qs = -asign * HTscale * (cos(Angle*degtorad)^(1.2)) * (sin(Angle*degtorad));
-                        AST(1,i) = AST(1,i) + qs;
-                        ASTSum(1) = ASTSum(1) + abs(qs);
-                        
-                        rc =  -HTscale * (6/5 * ((sin(Angle*degtorad)^2) * (cos(Angle*degtorad)^(.2))) - cos(Angle*degtorad)^2.2 );
-                        Diff(1,i) = Diff(1,i) + rc;
-                        DiffSum(1) = DiffSum(1) + abs(rc);
-                        
-                    end
-                end
-            end
             H = HInV(j);
-            Ang = (mod(AngleInV(j)-ShAng+180,360)-180);
-            
+%             Ang = (mod(AngleInV(j)-ShAng+180,360)-180);
+            if AngleInV(j)>180 % to use the wave crest orientation -/+ 90 from the orientation reported by WIS...
+                Ang = (mod(AngleInV(j)+90-ShAng+180,360)-180);
+            else
+                Ang = (mod(AngleInV(j)-90-ShAng+180,360)-180);
+            end
             if ((abs(Ang)<90))
                 
                 for i = 1:binnumber
@@ -125,12 +101,12 @@ for runs = 1 : length(input_files_rose)
                         
                         % CERC formula
                         qs = -asign * HTscale * (cos(Angle*degtorad)^(1.2)) * (sin(Angle*degtorad));
-                        AST(2,i) = AST(2,i) + qs;
-                        ASTSum(2) = ASTSum(2) + abs(qs);
+                        AST(i) = AST(i) + qs;
+                        ASTSum = ASTSum + abs(qs);
                         
                         rc =  -HTscale * (6/5 * ((sin(Angle*degtorad)^2) * (cos(Angle*degtorad)^(.2))) - cos(Angle*degtorad)^2.2 );
-                        Diff(2,i) = Diff(2,i) + rc;
-                        DiffSum(2) = DiffSum(2) + abs(rc);
+                        Diff(i) = Diff(i) + rc;
+                        DiffSum = DiffSum + abs(rc);
                     end
                     
                 end
@@ -186,11 +162,9 @@ for runs = 1 : length(input_files_rose)
     hold off
     end
     
-    clear AngleDeepV HInV HDeepV AngleInV TIn
+    clear HInV AngleInV TIn
     save(join(savename,''))
     
     
-    time_run = zeros(length(input_files_rose),1);
-    time_run(runs) = toc./60 %time each run takes in minutes
 end
 end

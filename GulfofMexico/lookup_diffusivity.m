@@ -1,4 +1,4 @@
-function [diffusivity] = lookup_diffusivity(sl_azimuth,stationID,waveclimatefolder)
+function [diffusivity,WaveAngle] = lookup_diffusivity(sl_azimuth,stationID,waveclimatefolder,plot_i,BarrierName)
 if sl_azimuth>180
     sl_azimuth = sl_azimuth-180;
 end
@@ -13,9 +13,22 @@ for runs = 1 : length(input_files_wc)
     else
         continue;
     end
+
 % find intersection between gammas and shoreline azimuth
-[~,diffusivity] = polyxpoly(ShAngs,Gammas(:,1),[sl_azimuth sl_azimuth],[-1 1]);
-% plot(ShAngs,Gammas(:,1),'g','linewidth',1.5)
-% hold on
-% xline(sl_azimuth)
+% figure()
+subplot(4,5,plot_i)
+plot(ShAngs,TrueDiffs,'g','linewidth',1.5)
+xlabel('hypothetical shoreline angle')
+ylabel('diffusivity')
+hold on
+xline(sl_azimuth)
+title(BarrierName)
+
+
+[~,diffusivity] = polyxpoly(ShAngs,TrueDiffs,[sl_azimuth sl_azimuth],[-1e10 1e10]);
+
+load('binarray_WIS_rose.mat')
+[~,indmax] = max(EnergyFluxIn);
+WaveAngle = binarray(indmax);
+
 end
