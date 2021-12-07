@@ -3,7 +3,7 @@
 load('GoM_Barrier_Mapped_Data.mat')
 BarrierIsland_name = strrep(BarrierIsland, '_', ' ');
 barrier_num = [1:length(BarrierIsland);1:length(BarrierIsland)]';
-MeanMinDepthm(13:14) = 1.4;
+MeanMinDepthm(11:12) = 1.4;
 
 ind_West_East = [2 6 17 15 16 7 8 10 1 11 12 4 3 14 9 13 5];
 
@@ -23,9 +23,9 @@ L_ast = AlongshoreSeagullLengthm;
 L_ow = MeanWidthm;
 
 % calculate peclet
-Pe_barrier_max = u_ow_max.*L_ast.^2./L_ow./(diffusivity);
-Pe_barrier_min = u_ow_min.*L_ast.^2./L_ow./(diffusivity);
-Pe_barrier_meas = u_ow_meas.*L_ast.^2./L_ow./(diffusivity);
+Pe_barrier_max = (u_ow_max.*(L_ast.^2))./(L_ow.*(diffusivity));
+Pe_barrier_min = (u_ow_min.*(L_ast.^2))./(L_ow.*(diffusivity));
+Pe_barrier_meas = (u_ow_meas.*(L_ast.^2))./(L_ow.*(diffusivity));
 
 %% plot
 % peclet range
