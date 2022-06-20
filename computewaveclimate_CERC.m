@@ -1,4 +1,4 @@
-function computewaveclimate_CERC(inputFolder_rose,outputFolder_qsdif,plot_on)
+function computewaveclimate_CERC(inputFolder_rose,outputFolder_qsdif,Dsf,plot_on,save_on)
 % this version computes CERC formula of Qs
 
 
@@ -74,6 +74,7 @@ for runs = 1 : length(input_files_rose)
         AST = zeros(1,360/binsize);
         ASTSum = zeros(1,1);
         Diff = zeros(1,360/binsize);
+        Psi = zeros(1,360/binsize);
         DiffSum = zeros(1,1);
         
         Bad = 0; % bad data points
@@ -106,6 +107,7 @@ for runs = 1 : length(input_files_rose)
                         
                         rc =  -HTscale * (6/5 * ((sin(Angle*degtorad)^2) * (cos(Angle*degtorad)^(.2))) - cos(Angle*degtorad)^2.2 );
                         Diff(i) = Diff(i) + rc;
+                        Psi(i) = Psi(i) + (6/5 * ((sin(Angle*degtorad)^2) * (cos(Angle*degtorad)^(.2))) - cos(Angle*degtorad)^2.2);
                         DiffSum = DiffSum + abs(rc);
                     end
                     
@@ -123,6 +125,7 @@ for runs = 1 : length(input_files_rose)
         QsRaw = sum(AST,2);
         Gamma = sum(Diff,2) ./ DiffSum;
         TrueDiff = sum(Diff,2);
+        Psi_sum = sum(Psi,2);
         
         
         QsRaws(k,:) = QsRaw;
@@ -130,7 +133,8 @@ for runs = 1 : length(input_files_rose)
         Qss(k,:) = Qs;
         QssGross(k,:) = ASTSum;
         Gammas(k,:) = Gamma;
-        TrueDiffs(k,:) = TrueDiff;
+        TrueDiffs(k,:) = TrueDiff/(ldata)*0.17/Dsf;
+        Psis(k,:) = Psi_sum;
         
         ASTs(k,:,:) = AST(:,:);
         Diffs(k,:,:) = Diff(:,:);
@@ -163,7 +167,9 @@ for runs = 1 : length(input_files_rose)
     end
     
     clear HInV AngleInV TIn
+    if save_on
     save(join(savename,''))
+    end
     
     
 end

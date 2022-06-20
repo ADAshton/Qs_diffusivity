@@ -17,19 +17,19 @@ addpath(pwd)
 % output is matlab files of computed wave climate info using CERC formula
 
 % WaveWatch3
-inputFolder_WW3 = 'THIS FOLDER/WW3_Data'; % where is your WW3 data?
-outputFolder_Waves = 'THIS FOLDER/Wave_Data'; % where do you want the wave roses to go?
+inputFolder_WW3 = '/Users/rosepalermo/Documents/GitHub/Qs_diffusivity/CapeCodExample/WW3_Data/'; % where is your WW3 data?
+outputFolder_Waves = '/Users/rosepalermo/Documents/GitHub/Qs_diffusivity/CapeCodExample/Wave_Data/'; % where do you want the wave roses to go?
 ShorelineAngle_init = 165; % where the shoreline angle loop starts
 saveWW3data_capecod(inputFolder_WW3,outputFolder_Waves,ShorelineAngle_init)
 
 % WIS
-inputFolder_WIS = "THIS FOLDER/WIS_Data"; % where is your WW3 data?
-outputFolder_Waves = "THIS FOLDER/Wave_Data"; % where do you want the wave roses to go?
+inputFolder_WIS = "/Users/rosepalermo/Documents/GitHub/Qs_diffusivity/CapeCodExample/WIS_Data/"; % where is your WW3 data?
+outputFolder_Waves = "/Users/rosepalermo/Documents/GitHub/Qs_diffusivity/CapeCodExample/Wave_Data/"; % where do you want the wave roses to go?
 saveWISdata_capecod(inputFolder_WIS,outputFolder_Waves,ShorelineAngle_init)
 
 %%%%% compute wave climate -- this only needs to be done one time for a set of WIS & WW3 stations
-outputFolder_Waves = "THIS FOLDER/Wave_Data"; % same as above)
-outputFolder_waveclimate = "THIS FOLDER/Waveclimate";
+outputFolder_Waves = "/Users/rosepalermo/Documents/GitHub/Qs_diffusivity/CapeCodExample/Wave_Data/"; % same as above)
+outputFolder_waveclimate = "/Users/rosepalermo/Documents/GitHub/Qs_diffusivity/CapeCodExample/Waveclimate/";
 plot_on = 1; % 1 to make plots, 0 to not
 computewaveclimate_CERC(outputFolder_Waves,outputFolder_waveclimate,plot_on)
 
