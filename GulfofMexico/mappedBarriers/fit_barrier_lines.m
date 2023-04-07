@@ -36,8 +36,8 @@ for i = 1 : length(input_files)
     if sl_az(i)>180
         sl_az(i) = sl_az(i)-180;
     end
-%     title(BarrierIsland_name{i})
-    title(sl_az(i))
+    title(BarrierIsland_name{i})
+%     title(sl_az(i))
 end
 % ind_neg = sl_az<0;
 % ind_pos = sl_az>0;

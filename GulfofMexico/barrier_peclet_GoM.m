@@ -7,15 +7,16 @@ barrier_num = [1:length(BarrierIsland);1:length(BarrierIsland)]';
 MeanMinDepthm(11:12) = 1.4;
 BarrierIsland_name{11} = 'Scofield';
 BarrierIsland_name{12} = 'Pelican';
-BarrierIsland_name{15} = 'Timbalier East';
-BarrierIsland_name{16} = 'Timbalier West';
+BarrierIsland_name{15} = 'Timbalier West';
+BarrierIsland_name{16} = 'Timbalier East';
 BarrierIsland_name{10} = 'Isle Grande Terre';
 BarrierIsland_name{6} = 'Whiskey';
 BarrierIsland_name{17} = 'Trinity';
 
 ind_West_East = [2 6 17 15 16 7 8 10 1 11 12 4 3 14 9 13 5];
 
-load('diffusivity_gulfbarriers_v2.mat') % diffusivity is output as -HTscale * psi (m^2/s)
+% load('diffusivity_gulfbarriers_v2.mat') % diffusivity is output as -HTscale * psi (m^2/s)
+load('diffusivity_040723.mat')
 ind_neg = logical(double((diffusivity_m2s<0))+double(isnan(diffusivity_m2s)));
 diffusivity_m2y = diffusivity_m2s*365*24*60*60; % (dsf = 10; K2 = 0.17; already included in net diffusivity) m^2/s-->m^2/yr
 diffusivity_kmyr = diffusivity_m2y/1e6;

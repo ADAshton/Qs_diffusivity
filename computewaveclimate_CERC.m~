@@ -34,7 +34,7 @@ for runs = 1 : length(input_files_rose)
     
     orients = 0;         % shoreline orientation of normal to data array
     orientdel = 5;
-    orientend = 360;%180;
+    orientend = 180;
     calcangles = (orientend - orients)/orientdel + 1;
     shornt = 0;           % degrees (clockwise = positive) difference between location and array
     g= 9.81;             % That's gravity, holmes
@@ -83,9 +83,18 @@ for runs = 1 : length(input_files_rose)
         for j = 1:ldata
             
             H = HInV(j);
-            Ang = (mod(AngleInV(j)-ShAng+180,360)-180);% ang is the angle between the shoreline and the incident wave crest
+            Ang = (mod(AngleInV(j)-ShAng+180,360)-180);
+            % have to change interpretation of shoreline angle after the
+            % fact. Cannot change wave angle here to match shoreline
+            % orientation. Need to rotate mapped shoreline to match wave
+            % reference frame.
+%             if AngleInV(j)>180 % to use the wave crest orientation -/+ 90 from the orientation reported by WIS...
+%                 Ang = (mod(AngleInV(j)+90-ShAng+180,360)-180);
+%             else
+%                 Ang = (mod(AngleInV(j)-90-ShAng+180,360)-180);
+%             end
 
-            if ((abs(Ang)<90)) 
+            if ((abs(Ang)<90)) % ang is the angle between the shoreline and the incident wave crest
                 
                 for i = 1:binnumber
                     if ((((i-1)*binsize)-180 < Ang) && (Ang < i * binsize-180))
